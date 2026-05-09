@@ -4,19 +4,26 @@ import base.BaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.bidi.log.Log;
+import org.opentest4j.AssertionFailedError;
 import pages.LoginPage;
 import pages.SecureAreaPage;
 import utils.LoadDataProperties;
+import utils.TakeScreenshot;
 
 import java.io.IOException;
-import java.util.Base64;
+
 
 public class LoginTests extends BaseTest
 {
     @Test
     void validatePageLoad() throws IOException {
         LoginPage loginPage = new LoginPage(getDriver());
-        Assertions.assertEquals("The Internet", getDriver().getTitle());
+        try {
+            Assertions.assertEquals("The Intenet", getDriver().getTitle());
+        } catch (AssertionFailedError e) {
+            TakeScreenshot.takeScreenshot(getDriver());
+            throw e;
+        }
     }
     @Test
     void validateLoginSuccess() throws IOException {
@@ -26,8 +33,11 @@ public class LoginTests extends BaseTest
         loginPage.clickLogin();
         SecureAreaPage secureAreaPage = new SecureAreaPage();
         String loginMessage = secureAreaPage.getLoginMessage(getDriver());
-        //System.out.println(loginMessage);
-        Assertions.assertTrue(loginMessage.contains("You logged into a secure area"));
+        try {
+            Assertions.assertTrue(loginMessage.contains("You logged into a secure area"));
+        } catch (Exception e) {
+            TakeScreenshot.takeScreenshot(getDriver());
+        }
     }
 
     @Test
@@ -37,7 +47,6 @@ public class LoginTests extends BaseTest
         loginPage.enterValidPassword();
         loginPage.clickLogin();
         String loginMessage = loginPage.getLoginMessage();
-        System.out.println(loginMessage);
         Assertions.assertTrue(loginMessage.contains("Your username is invalid"));
     }
 
@@ -48,7 +57,6 @@ public class LoginTests extends BaseTest
         loginPage.enterInvalidPassword();
         loginPage.clickLogin();
         String loginMessage = loginPage.getLoginMessage();
-        System.out.println(loginMessage);
         Assertions.assertTrue(loginMessage.contains("Your password is invalid"));
     }
     @Test
@@ -60,7 +68,6 @@ public class LoginTests extends BaseTest
         SecureAreaPage secureAreaPage = new SecureAreaPage();
         secureAreaPage.clickLogout(getDriver());
         String logoutMessage = loginPage.getLoginMessage();
-        System.out.println(logoutMessage);
         Assertions.assertTrue(logoutMessage.contains("You logged out of the secure area"));
     }
     @Test

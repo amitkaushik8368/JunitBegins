@@ -6,6 +6,10 @@ import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import utils.LoadDataProperties;
+
+import java.io.IOException;
+
 /**
  * Purpose:
  *
@@ -17,18 +21,16 @@ import org.openqa.selenium.edge.EdgeDriver;
 public class BaseTest
 {
 
-    String browserType = "edge";
     private WebDriver driver;
 
     @BeforeEach
-    void setDriver() throws InterruptedException {
-//        this.driver = new EdgeDriver();
-//        this.driver.manage().window().maximize();
-        if(browserType.equalsIgnoreCase("edge"))
+    void setDriver() throws IOException {
+        LoadDataProperties.loadProperties();
+        if(LoadDataProperties.getBrowser().equalsIgnoreCase("edge"))
         {
             this.driver = new EdgeDriver();
             this.driver.manage().window().maximize();
-        } else if (browserType.equalsIgnoreCase("chrome")) {
+        } else if (LoadDataProperties.getBrowser().equalsIgnoreCase("chrome")) {
             this.driver = new ChromeDriver();
             this.driver.manage().window().maximize();
         } else {

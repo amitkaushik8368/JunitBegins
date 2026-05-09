@@ -37,5 +37,9 @@ public class LoadDataProperties
     {
         return properties.getProperty("invalid.password");
     }
+    public static String getBrowser()
+    {
+        return properties.getProperty("browser");
+    }
 
 }

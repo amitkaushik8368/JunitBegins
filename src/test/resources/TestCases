@@ -1,0 +1,7 @@
+Website: https://the-internet.herokuapp.com/login
+0. Validate page is loading
+1. Valid Login (Happy Path)
+2. Invalid Username + Valid Password
+3. Valid Username + Invalid Password
+4. Verify Logout Functionality
+5. Validate navigation to Elemental Selenium

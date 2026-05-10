@@ -18,7 +18,6 @@ public class LoginPage
     By elementalSelenium = By.xpath("//a[contains(@href, 'elemental')]");
 
     public LoginPage(WebDriver driver) throws IOException {
-        LoadDataProperties.loadProperties();
         this.driver = driver;
         waitUtility = new WaitUtility(driver);
     }
@@ -39,9 +38,10 @@ public class LoginPage
     {
         waitUtility.waitForElementVisibility(password).sendKeys(LoadDataProperties.getInvalidPassword());
     }
-    public void clickLogin()
+    public SecureAreaPage clickLogin()
     {
         this.driver.findElement(loginButton).click();
+        return new SecureAreaPage(driver);
     }
 
     public String getLoginMessage()
@@ -52,6 +52,4 @@ public class LoginPage
     public void navigateElementalSelenium() throws InterruptedException {
         waitUtility.waitForElementVisibility(elementalSelenium).click();
     }
-
-
 }

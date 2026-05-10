@@ -28,10 +28,12 @@ public class LoginTests extends BaseTest
     void validateLoginSuccess() throws IOException {
         test = extentReports.createTest("Validate successful Login");
         LoginPage loginPage = new LoginPage(getDriver());
+        test.info("Entering Username");
         loginPage.enterValidUsername();
+        test.warning("Entering Password");
         loginPage.enterValidPassword();
-        loginPage.clickLogin();
-        SecureAreaPage secureAreaPage = new SecureAreaPage(getDriver());
+        test.info("Clicking Login Button");
+        SecureAreaPage secureAreaPage = loginPage.clickLogin();
         String loginMessage = secureAreaPage.getLoginMessage();
         try {
             Assertions.assertTrue(loginMessage.contains("You logged into a secure area"));
@@ -83,8 +85,7 @@ public class LoginTests extends BaseTest
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.enterValidUsername();
         loginPage.enterValidPassword();
-        loginPage.clickLogin();
-        SecureAreaPage secureAreaPage = new SecureAreaPage(getDriver());
+        SecureAreaPage secureAreaPage = loginPage.clickLogin();
         secureAreaPage.clickLogout();
         String logoutMessage = loginPage.getLoginMessage();
         try {

@@ -3,11 +3,9 @@ package tests;
 import base.BaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.bidi.log.Log;
 import org.opentest4j.AssertionFailedError;
 import pages.LoginPage;
 import pages.SecureAreaPage;
-import utils.LoadDataProperties;
 import utils.TakeScreenshot;
 
 import java.io.IOException;
@@ -17,61 +15,89 @@ public class LoginTests extends BaseTest
 {
     @Test
     void validatePageLoad() throws IOException {
-        LoginPage loginPage = new LoginPage(getDriver());
+        test = extentReports.createTest("Validate Login Page Load");
         try {
-            Assertions.assertEquals("The Intenet", getDriver().getTitle());
+            Assertions.assertEquals("The Internet", getDriver().getTitle());
+            test.pass("The Login page has loaded successfully");
         } catch (AssertionFailedError e) {
-            TakeScreenshot.takeScreenshot(getDriver());
+            test.fail("Login Page has failed to Load: ").addScreenCaptureFromPath(TakeScreenshot.takeScreenshot(getDriver()));
             throw e;
         }
     }
     @Test
     void validateLoginSuccess() throws IOException {
+        test = extentReports.createTest("Validate successful Login");
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.enterValidUsername();
         loginPage.enterValidPassword();
         loginPage.clickLogin();
-        SecureAreaPage secureAreaPage = new SecureAreaPage();
-        String loginMessage = secureAreaPage.getLoginMessage(getDriver());
+        SecureAreaPage secureAreaPage = new SecureAreaPage(getDriver());
+        String loginMessage = secureAreaPage.getLoginMessage();
         try {
             Assertions.assertTrue(loginMessage.contains("You logged into a secure area"));
-        } catch (Exception e) {
-            TakeScreenshot.takeScreenshot(getDriver());
+            test.pass("User is able to login through Valid credentials");
+        } catch (Throwable e) {
+            test.fail("Login Functionality Failed").addScreenCaptureFromPath(TakeScreenshot.takeScreenshot(getDriver()));
+            throw e;
         }
     }
 
     @Test
     void validateInvalidUsername() throws IOException {
+        test = extentReports.createTest("Validate Invalid Username Login Failure");
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.enterInvalidUsername();
         loginPage.enterValidPassword();
         loginPage.clickLogin();
         String loginMessage = loginPage.getLoginMessage();
-        Assertions.assertTrue(loginMessage.contains("Your username is invalid"));
+        try {
+            Assertions.assertTrue(loginMessage.contains("Your username is invalid"));
+            test.pass("Login Failed with Invalid Username");
+        }catch (Throwable e)
+        {
+            test.fail("Unauthorised Login happened with Invalid Username").addScreenCaptureFromPath(TakeScreenshot.takeScreenshot(getDriver()));
+            throw e;
+        }
+
     }
 
     @Test
     void validateInvalidPassword() throws IOException {
+        test = extentReports.createTest("Validate login through Invalid  Password");
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.enterValidUsername();
         loginPage.enterInvalidPassword();
         loginPage.clickLogin();
         String loginMessage = loginPage.getLoginMessage();
-        Assertions.assertTrue(loginMessage.contains("Your password is invalid"));
+        try {
+            Assertions.assertTrue(loginMessage.contains("Your password is invalid"));
+            test.pass("Login Failed with Invalid Password");
+        } catch (Exception e) {
+            test.fail("Unauthorised Login happened with Invalid Password").addScreenCaptureFromPath(TakeScreenshot.takeScreenshot(getDriver()));
+            throw e;
+        }
     }
     @Test
     void validateLogoutFunctionality() throws IOException, InterruptedException {
+        test = extentReports.createTest("Validate Logout Functionality");
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.enterValidUsername();
         loginPage.enterValidPassword();
         loginPage.clickLogin();
-        SecureAreaPage secureAreaPage = new SecureAreaPage();
-        secureAreaPage.clickLogout(getDriver());
+        SecureAreaPage secureAreaPage = new SecureAreaPage(getDriver());
+        secureAreaPage.clickLogout();
         String logoutMessage = loginPage.getLoginMessage();
-        Assertions.assertTrue(logoutMessage.contains("You logged out of the secure area"));
+        try {
+            Assertions.assertTrue(logoutMessage.contains("You logged out of the secure area"));
+            test.pass("User is able to Logout correctly");
+        } catch (Throwable e) {
+            test.fail("User is unable to Logout").addScreenCaptureFromPath(TakeScreenshot.takeScreenshot(getDriver()));
+            throw e;
+        }
     }
     @Test
     void validateElementalSelenium() throws IOException, InterruptedException {
+        test = extentReports.createTest("Validate  Elemental Selenium Navigation");
         LoginPage loginPage = new LoginPage(getDriver());
         String originalWindow = getDriver().getWindowHandle();
         loginPage.navigateElementalSelenium();
@@ -83,9 +109,14 @@ public class LoginTests extends BaseTest
             }
         }
         String title = getDriver().getTitle();
-        if (title != null) {
-            Assertions.assertTrue(title.contains("Elemental"));
+        try {
+            if (title != null) {
+                Assertions.assertTrue(title.contains("Elemental"));
+                test.pass("User is able to navigate to Elemental Selenium:");
+            }
+        } catch (Throwable e) {
+            test.fail("User is unable to navigate to Elemental Selenium").addScreenCaptureFromPath(TakeScreenshot.takeScreenshot(getDriver()));
+            throw e;
         }
     }
-
 }

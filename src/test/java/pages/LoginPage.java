@@ -3,12 +3,14 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import utils.LoadDataProperties;
+import utils.WaitUtility;
 
 import java.io.IOException;
 
 public class LoginPage
 {
     WebDriver driver;
+    WaitUtility waitUtility;
     By username = By.id("username");
     By password = By.id("password");
     By loginButton = By.className("radius");
@@ -18,24 +20,24 @@ public class LoginPage
     public LoginPage(WebDriver driver) throws IOException {
         LoadDataProperties.loadProperties();
         this.driver = driver;
-        this.driver.get(LoadDataProperties.getURL());
+        waitUtility = new WaitUtility(driver);
     }
 
     public void enterValidUsername()
     {
-        this.driver.findElement(username).sendKeys(LoadDataProperties.getValidUsername());
+        waitUtility.waitForElementVisibility(username).sendKeys(LoadDataProperties.getValidUsername());
     }
     public void enterValidPassword()
     {
-        this.driver.findElement(password).sendKeys(LoadDataProperties.getValidPassword());
+        waitUtility.waitForElementVisibility(password).sendKeys(LoadDataProperties.getValidPassword());
     }
     public void enterInvalidUsername()
     {
-        this.driver.findElement(username).sendKeys(LoadDataProperties.getInvalidUsername());
+        waitUtility.waitForElementVisibility(username).sendKeys(LoadDataProperties.getInvalidUsername());
     }
     public void enterInvalidPassword()
     {
-        this.driver.findElement(password).sendKeys(LoadDataProperties.getInvalidPassword());
+        waitUtility.waitForElementVisibility(password).sendKeys(LoadDataProperties.getInvalidPassword());
     }
     public void clickLogin()
     {
@@ -44,11 +46,11 @@ public class LoginPage
 
     public String getLoginMessage()
     {
-        return this.driver.findElement(loginMessage).getText().replaceAll("[^A-Za-z ]", "");
+        return waitUtility.waitForElementVisibility(loginMessage).getText().replaceAll("[^A-Za-z ]", "");
     }
 
     public void navigateElementalSelenium() throws InterruptedException {
-        this.driver.findElement(elementalSelenium).click();
+        waitUtility.waitForElementVisibility(elementalSelenium).click();
     }
 
 

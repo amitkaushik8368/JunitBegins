@@ -2,19 +2,24 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import utils.WaitUtility;
 
 public class SecureAreaPage
 {
     By logoutButton = By.xpath("//a[contains(@href, 'logout')]");
     By loginMessage = By.id("flash");
-
-    public void clickLogout(WebDriver driver)
+    WaitUtility waitUtility;
+    public SecureAreaPage(WebDriver driver)
     {
-        driver.findElement(logoutButton).click();
+        waitUtility = new WaitUtility(driver);
     }
-    public String getLoginMessage(WebDriver driver)
+    public void clickLogout()
     {
-        return driver.findElement(loginMessage).getText().replaceAll("[^A-Za-z ]", "");
+        waitUtility.waitForElementVisibility(logoutButton).click();
+    }
+    public String getLoginMessage()
+    {
+        return waitUtility.waitForElementVisibility(loginMessage).getText().replaceAll("[^A-Za-z ]", "");
     }
 
 }

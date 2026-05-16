@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import utils.JsonReader;
 import utils.LoadDataProperties;
 import utils.WaitUtility;
 
@@ -17,26 +18,30 @@ public class LoginPage
     By loginMessage = By.id("flash");
     By elementalSelenium = By.xpath("//a[contains(@href, 'elemental')]");
 
-    public LoginPage(WebDriver driver) throws IOException {
+    public LoginPage(WebDriver driver) {
         this.driver = driver;
         waitUtility = new WaitUtility(driver);
     }
 
     public void enterValidUsername()
     {
-        waitUtility.waitForElementVisibility(username).sendKeys(LoadDataProperties.getValidUsername());
+        //waitUtility.waitForElementVisibility(username).sendKeys(LoadDataProperties.get("valid.username"));
+        waitUtility.waitForElementVisibility(username).sendKeys(JsonReader.getValue("validUser", "username"));
     }
     public void enterValidPassword()
     {
-        waitUtility.waitForElementVisibility(password).sendKeys(LoadDataProperties.getValidPassword());
+        //waitUtility.waitForElementVisibility(password).sendKeys(LoadDataProperties.get("valid.password"));
+        waitUtility.waitForElementVisibility(password).sendKeys(JsonReader.getValue("validUser", "password"));
     }
     public void enterInvalidUsername()
     {
-        waitUtility.waitForElementVisibility(username).sendKeys(LoadDataProperties.getInvalidUsername());
+        //waitUtility.waitForElementVisibility(username).sendKeys(LoadDataProperties.get("invalid.username"));
+        waitUtility.waitForElementVisibility(username).sendKeys(JsonReader.getValue("invalidUser", "username"));
     }
     public void enterInvalidPassword()
     {
-        waitUtility.waitForElementVisibility(password).sendKeys(LoadDataProperties.getInvalidPassword());
+        //waitUtility.waitForElementVisibility(password).sendKeys(LoadDataProperties.get("invalid.password"));
+        waitUtility.waitForElementVisibility(password).sendKeys(JsonReader.getValue("invalidUser", "password"));
     }
     public SecureAreaPage clickLogin()
     {

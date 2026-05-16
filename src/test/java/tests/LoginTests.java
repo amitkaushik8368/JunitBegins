@@ -19,13 +19,14 @@ public class LoginTests extends BaseTest
         try {
             Assertions.assertEquals("The Internet", getDriver().getTitle());
             test.pass("The Login page has loaded successfully");
+            logger.info("Test Case Passed");
         } catch (AssertionFailedError e) {
             test.fail("Login Page has failed to Load: ").addScreenCaptureFromPath(TakeScreenshot.takeScreenshot(getDriver()));
             throw e;
         }
     }
     @Test
-    void validateLoginSuccess() throws IOException {
+    void validateLoginSuccess() throws IOException, InterruptedException {
         test = extentReports.createTest("Validate successful Login");
         LoginPage loginPage = new LoginPage(getDriver());
         test.info("Entering Username");

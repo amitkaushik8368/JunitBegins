@@ -1,5 +1,6 @@
 package utils;
 
+import base.BaseTest;
 import com.google.common.io.Files;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -23,6 +24,7 @@ public class TakeScreenshot
         TakesScreenshot ts = (TakesScreenshot) driver;
         File src = ts.getScreenshotAs(OutputType.FILE);
         Files.copy(src, dest);
+        BaseTest.logger.info("Screenshot Taken");
         return path;
     }
 }
